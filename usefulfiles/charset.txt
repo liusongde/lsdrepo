@@ -1,0 +1,26 @@
+ Charset.forName("GBK").encode(CharBuffer.wrap(new char[]{cha}));
+
+                     
+
+                    //字符集相关代码
+
+                    Charset charset = Charset.forName("GBK");
+                    CharsetEncoder encoder = charset.newEncoder();
+                    encoder.onMalformedInput(CodingErrorAction.REPLACE);
+                    encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+                    try
+                    {
+                      ByteBuffer byteBuffer = encoder.encode(CharBuffer.wrap(str));
+                      int bytesLength = byteBuffer.limit();
+                      byte[] bytes;
+                      if (byteBuffer.hasArray()) {
+                        bytes = byteBuffer.array();
+                      } else {
+                        bytes = new byte[bytesLength];
+                        byteBuffer.get(bytes);
+                      }
+                      str = charset.newDecoder().decode(byteBuffer).toString();
+                    } catch (CharacterCodingException ex) {
+                        throw new BusinessException("你输入了不认识的字符！");
+                    }
+                    
